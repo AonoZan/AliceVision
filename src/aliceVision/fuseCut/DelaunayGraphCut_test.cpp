@@ -65,7 +65,6 @@ BOOST_AUTO_TEST_CASE(fuseCut_delaunayGraphCut)
         ALICEVISION_LOG_TRACE("[" << i << "]: " << delaunayGC._verticesCoords[i].x << ", " << delaunayGC._verticesCoords[i].y << ", " << delaunayGC._verticesCoords[i].z);
 
     // delaunayGC.createGraphCut(&hexah[0], cams, tempDirPath + "/", tempDirPath + "/SpaceCamsTracks/", false);
-    delaunayGC.initVertices();
     delaunayGC.computeDelaunay();
     delaunayGC.displayStatistics();
     delaunayGC.computeVerticesSegSize(true, 0.0f);
