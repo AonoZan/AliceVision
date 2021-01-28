@@ -1782,7 +1782,7 @@ float DelaunayGraphCut::weightFcn(float nrc, bool labatutWeights, int  /*ncams*/
 }
 
 void DelaunayGraphCut::fillGraph(bool fixesSigma, float nPixelSizeBehind,
-                               bool labatutWeights, bool fillOut, float distFcnHeight) // fixesSigma=true nPixelSizeBehind=2*spaceSteps allPoints=1 behind=0 labatutWeights=0 fillOut=1 distFcnHeight=0
+                               bool labatutWeights, bool fillOut, float distFcnHeight) // fixesSigma=false nPixelSizeBehind=2*spaceSteps allPoints=1 behind=0 labatutWeights=0 fillOut=1 distFcnHeight=0
 {
     ALICEVISION_LOG_INFO("Computing s-t graph weights.");
     long t1 = clock();
@@ -1881,13 +1881,13 @@ void DelaunayGraphCut::fillGraph(bool fixesSigma, float nPixelSizeBehind,
 
 void DelaunayGraphCut::fillGraphPartPtRc(int& outTotalStepsFront, int& outTotalStepsBehind, GeometriesCount& outFrontCount, GeometriesCount& outBehindCount, int vertexIndex, int cam,
                                        float weight, bool fixesSigma, float nPixelSizeBehind,
-                                       bool fillOut, float distFcnHeight)  // fixesSigma=true nPixelSizeBehind=2*spaceSteps allPoints=1 behind=0 fillOut=1 distFcnHeight=0
+                                       bool fillOut, float distFcnHeight)  // fixesSigma=false nPixelSizeBehind=2*spaceSteps allPoints=1 behind=0 fillOut=1 distFcnHeight=0
 {
     const int maxint = 1000000; // std::numeric_limits<int>::std::max()
     const double marginEpsilonFactor = 1.0e-4;
 
     const Point3d& originPt = _verticesCoords[vertexIndex];
-    const float pixSize = mp->getCamPixelSize(originPt, cam);
+    const float pixSize = _verticesAttr[vertexIndex].pixSize; // use computed pixSize,  mp->getCamPixelSize(originPt, cam);
     float maxDist = nPixelSizeBehind * pixSize;
     if(fixesSigma)
         maxDist = nPixelSizeBehind;
@@ -1999,6 +1999,8 @@ void DelaunayGraphCut::fillGraphPartPtRc(int& outTotalStepsFront, int& outTotalS
             _cellsAttr[lastIntersectedFacet.cellIndex].cellSWeight = (float)maxint;
         }
     }
+
+    if(pixSize > 0.0f) // fillIn
     {
         // Initialisation
         GeometryIntersection geometry(vertexIndex); // Starting on global vertex index
