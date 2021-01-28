@@ -428,6 +428,8 @@ public:
      */
     void addHelperPoints(int nGridHelperVolumePointsDim, const Point3d Voxel[8], float minDist);
 
+    void addMaskHelperPoints(const Point3d voxel[8], const StaticVector<int>& cams, const FuseParams& params);
+
     void fuseFromDepthMaps(const StaticVector<int>& cams, const Point3d voxel[8], const FuseParams& params);
 
     void computeVerticesSegSize(bool allPoints, float alpha = 0.0f);
